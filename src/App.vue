@@ -1,17 +1,23 @@
 <template>
   <div id="app">
+    <div class="container">
+      <weather></weather>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import axios from '@/utils/axios.js'
+import Weather from '@/components/weather/index.vue'
 
 @Component({
+  components: {
+    Weather
+  }
 })
 export default class App extends Vue {
   async created () {
-    console.log(await axios.get('weather?q=kyiv&appid=' + process.env.VUE_APP_API_KEY))
+    // console.log(await axios.get('weather?q=kyiv&units=metric&appid=' + process.env.VUE_APP_API_KEY))
   }
 }
 </script>
