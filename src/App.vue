@@ -1,20 +1,19 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import HelloWorld from './components/HelloWorld.vue'
+import axios from '@/utils/axios.js'
 
 @Component({
-  components: {
-    HelloWorld
-  }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  async created () {
+    console.log(await axios.get('weather?q=kyiv&appid=' + process.env.VUE_APP_API_KEY))
+  }
+}
 </script>
 
 <style>
