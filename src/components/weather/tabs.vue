@@ -4,14 +4,14 @@
       v-for="(tab, i) in tabsList"
       :key="i"
       type="button"
-      class="btn btn-outline-success"
-      :class="{'active': tab.active}"
+      class="btn btn-outline-success position-relative"
+      :class="{'active': indexActive === i}"
       @click="fetchData(tab, i)"
     >
-      <div v-if="tab.loading" class="spinner-border text-light spinner-border-sm" role="status">
+      <div v-if="tab.loading" class="spinner-border text-light spinner-border-sm tabs_btn__spinner" role="status">
         <span class="sr-only">Loading...</span>
       </div>
-      <span>{{tab.title}}</span>
+      <span :class="{'text-success': tab.loading}">{{tab.title}}</span>
     </button>
   </div>
 </template>
@@ -23,9 +23,9 @@ import axios from '@/utils/axios'
 
 @Component
 export default class Tabs extends Vue {
-  private loading = false
+  private indexActive = 0
   private paramsForRequest = {
-    q: '',
+    id: 0,
     units: process.env.VUE_APP_UNITS,
     appid: process.env.VUE_APP_API_KEY
   }
@@ -34,19 +34,33 @@ export default class Tabs extends Vue {
   private tabsList!: ITab[]
 
   private async fetchData (tab: ITab, i: number): Promise<void> {
-    this.$emit('toggleOptionTab', { i, property: 'active' })
-    this.$emit('toggleOptionTab', { i, property: 'loading' })
-    this.paramsForRequest.q = tab.url
+    this.$emit('toggleOptionTab', { i, property: 'loading', value: true })
+    this.indexActive = i
+    this.paramsForRequest.id = tab.id
     try {
       const { data } = await axios.get('/weather', { params: this.paramsForRequest })
       this.$emit('writeData', data)
+      this.$emit('toggleOptionTab', { i, property: 'loading', value: false })
     } catch (e) {
       console.error(e)
     }
+  }
+
+  created () {
+    const tab = this.tabsList[this.indexActive]
+    const index = this.indexActive
+    this.fetchData(tab, index)
   }
 }
 </script>
 
 <style scoped>
-
+  .tabs_btn__spinner {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 </style>

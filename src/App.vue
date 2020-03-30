@@ -15,11 +15,7 @@ import Weather from '@/components/weather/index.vue'
     Weather
   }
 })
-export default class App extends Vue {
-  async created () {
-    // console.log(await axios.get('weather?q=kyiv&units=metric&appid=' + process.env.VUE_APP_API_KEY))
-  }
-}
+export default class App extends Vue {}
 </script>
 
 <style>

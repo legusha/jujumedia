@@ -5,7 +5,10 @@
       @toggleOptionTab="toggleOptionTab"
       @writeData="writeData"
     ></tabs>
-    <table-data></table-data>
+    <table-data
+      :temperature="temperature"
+      :wind="wind"
+    ></table-data>
   </div>
 </template>
 
@@ -13,7 +16,7 @@
 import { Component, Vue, Emit } from 'vue-property-decorator'
 import Tabs from './tabs.vue'
 import TableData from './table-data.vue'
-import { ITab } from '@/interfaces/weather'
+import { ITab, ITemperature, IWind } from '@/interfaces/weather'
 
 @Component({
   components: {
@@ -25,66 +28,39 @@ export default class IndexWeather extends Vue {
   public tabsList: ITab[] = [
     {
       title: 'Kiev',
-      url: 'kyiv',
-      active: true,
+      id: 703447,
       loading: false
     },
     {
       title: 'London',
-      url: 'london',
-      active: false,
+      id: 2643743,
       loading: false
     },
     {
       title: 'New York',
-      url: 'new_york',
-      active: false,
+      id: 5128638,
       loading: false
     }
   ]
 
-  public weatherParams = {
-    temperature: {
-      title: 'Temperature',
-      value: '',
-      units: '°C'
-    },
-    atmospheric: {
-      title: 'Atmospheric pressure',
-      value: '',
-      units: 'hPa'
-    },
-    humidity: {
-      title: 'Humidity',
-      value: '',
-      units: '%'
-    },
-    windSpeed: {
-      title: 'Wind speed',
-      value: '',
-      units: 'meter/sec'
-    },
-    windDirection: {
-      title: 'Wind direction',
-      value: '',
-      units: '°'
-    }
-  }
+  public temperature = {}
+  public wind = {}
 
   @Emit('toggleOptionTab')
-  toggleOptionTab ({ i, property = 'active' }: {i: number; property: keyof ITab}): void {
+  toggleOptionTab ({ i, property = 'loading', value }: { i: number; property: keyof ITab; value: boolean }): void {
     this.tabsList.forEach((tab, index) => {
-      if (i !== index) {
-        tab[property] = false
+      if (i === index) {
+        tab[property] = value
         return
       }
-      tab[property] = true
+      tab[property] = false
     })
   }
 
   @Emit('writeData')
-  writeData ({ main, wind }: {main: any; wind: any}): void {
-    console.log(main, wind)
+  writeData ({ main, wind }: { main: ITemperature; wind: IWind }): void {
+    this.temperature = main
+    this.wind = wind
   }
 }
 </script>

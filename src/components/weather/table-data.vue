@@ -1,39 +1,41 @@
 <template>
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-    </thead>
+  <table class="table text-left table-sm">
     <tbody>
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <th scope="row">Temperature</th>
+      <td>{{temperature.temp}} °C</td>
     </tr>
     <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
+      <th scope="row">Atmospheric pressure</th>
+      <td>{{temperature.pressure}} hPa</td>
     </tr>
     <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
+      <th scope="row">Humidity</th>
+      <td>{{temperature.humidity}} %</td>
+    </tr>
+    <tr>
+      <th scope="row">Wind speed</th>
+      <td>{{ wind.speed }} meter/sec</td>
+    </tr>
+    <tr>
+      <th scope="row">Wind direction</th>
+      <td>{{wind.deg}} °</td>
     </tr>
     </tbody>
   </table>
 </template>
 
-<script>
-export default {
-  name: 'table-data'
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator'
+import { ITemperature, IWind } from '@/interfaces/weather'
+
+@Component
+export default class TableData extends Vue {
+  @Prop({ required: true, type: Object })
+  private temperature!: ITemperature
+
+  @Prop({ required: true, type: Object })
+  private wind!: IWind
 }
 </script>
 
