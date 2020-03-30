@@ -34,16 +34,20 @@ export default class Tabs extends Vue {
   private tabsList!: ITab[]
 
   private async fetchData (tab: ITab, i: number): Promise<void> {
-    this.$emit('toggleOptionTab', { i, property: 'loading', value: true })
+    this.toggleLoading(i, true)
     this.indexActive = i
     this.paramsForRequest.id = tab.id
     try {
       const { data } = await axios.get('/weather', { params: this.paramsForRequest })
       this.$emit('writeData', data)
-      this.$emit('toggleOptionTab', { i, property: 'loading', value: false })
+      this.toggleLoading(i, false)
     } catch (e) {
       console.error(e)
     }
+  }
+
+  private toggleLoading (i: number, value: boolean): void {
+    this.$emit('toggleOptionTab', { i, property: 'loading', value })
   }
 
   created () {

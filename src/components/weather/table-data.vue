@@ -1,5 +1,5 @@
 <template>
-  <table class="table text-left table-sm">
+  <table class="table table-sm">
     <tbody>
     <tr>
       <th scope="row">Temperature</th>
